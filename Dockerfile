@@ -32,7 +32,6 @@ RUN \
     file \
     gamin \
     gzip \
-    ip \
     iptables \
     libmail-spf-perl \
     libnet-dns-perl \
