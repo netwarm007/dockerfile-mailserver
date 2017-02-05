@@ -1,13 +1,21 @@
-FROM ubuntu:14.04
-MAINTAINER Thomas VIAL
+FROM ubuntu
+LABEL maintainer Chen, Wenli <chenwenli@chenwenli.com>
 
 # Packages
-RUN DEBIAN_FRONTEND=noninteractive apt-get update -q --fix-missing && \
+RUN \
+echo "postfix postfix/mailname string your.hostname.com" | debconf-set-selections
+
+RUN \
+echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections
+
+RUN \
+  DEBIAN_FRONTEND=noninteractive apt-get update -q --fix-missing && \
   apt-get -y upgrade && \
   apt-get -y install --no-install-recommends \
     amavisd-new \
     arj \
     bzip2 \
+    ca-certificates \
     clamav \
     clamav-daemon \
     curl \
@@ -24,6 +32,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update -q --fix-missing && \
     file \
     gamin \
     gzip \
+    ip \
     iptables \
     libmail-spf-perl \
     libnet-dns-perl \
@@ -41,11 +50,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update -q --fix-missing && \
     spamassassin \
     unzip \
     && \
-  curl -sk http://neuro.debian.net/lists/trusty.de-m.libre > /etc/apt/sources.list.d/neurodebian.sources.list && \
-  apt-key adv --recv-keys --keyserver hkp://pgp.mit.edu:80 0xA5D32F012649A5A9 && \
-  curl https://packages.elasticsearch.org/GPG-KEY-elasticsearch | apt-key add - && \
-  echo "deb http://packages.elastic.co/beats/apt stable main" | tee -a /etc/apt/sources.list.d/beats.list && \
-  apt-get update -q --fix-missing && apt-get -y upgrade fail2ban filebeat && \
   apt-get autoclean && rm -rf /var/lib/apt/lists/* && \
   rm -rf /usr/share/locale/* && rm -rf /usr/share/man/* && rm -rf /usr/share/doc/* && \
   touch /var/log/auth.log && update-locale
@@ -119,7 +123,7 @@ RUN sed -i -r "/^#?compress/c\compress\ncopytruncate" /etc/logrotate.conf && \
   sed -i -r 's|/var/log/mail|/var/log/mail/mail|g' /etc/logrotate.d/rsyslog
 
 # Get LetsEncrypt signed certificate
-RUN curl -s https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem > /etc/ssl/certs/lets-encrypt-x3-cross-signed.pem
+RUN curl -s https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem  > /etc/ssl/certs/lets-encrypt-x3-cross-signed.pem
 
 COPY ./target/bin /usr/local/bin
 # Start-mailserver script
