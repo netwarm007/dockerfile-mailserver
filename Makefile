@@ -1,4 +1,4 @@
-NAME = tvial/docker-mailserver:testing
+NAME = tim03/docker-mailserver:testing
 
 all: build-no-cache generate-accounts run fixtures tests clean
 all-fast: build generate-accounts run fixtures tests clean
