@@ -10,7 +10,6 @@ echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-sel
 
 RUN \
   DEBIAN_FRONTEND=noninteractive apt-get update -q --fix-missing && \
-  apt-get -y upgrade && \
   apt-get -y install --no-install-recommends \
     amavisd-new \
     arj \
@@ -32,6 +31,7 @@ RUN \
     file \
     gamin \
     gzip \
+    iproute2 \
     iptables \
     libmail-spf-perl \
     libnet-dns-perl \
