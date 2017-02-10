@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:16.04
 LABEL maintainer Chen, Wenli <chenwenli@chenwenli.com>
 
 # Packages
@@ -48,6 +48,7 @@ RUN \
     sasl2-bin \
     spamassassin \
     unzip \
+    x11-apps \
     && \
   apt-get autoclean && rm -rf /var/lib/apt/lists/* && \
   rm -rf /usr/share/locale/* && rm -rf /usr/share/man/* && rm -rf /usr/share/doc/* && \
